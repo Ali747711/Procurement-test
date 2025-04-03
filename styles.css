@@ -377,6 +377,7 @@ main {
 .tab-content {
     display: none;
     padding: 2rem;
+    overflow: auto; /* Add overflow handling */
 }
 
 .tab-content.active {
@@ -485,9 +486,9 @@ main {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     margin-top: 2rem;
+    margin-bottom: 2rem; /* Add bottom margin */
 }
 
-/* Update the chart container styles */
 .chart-container {
     background: white;
     border-radius: var(--radius);
@@ -498,43 +499,16 @@ main {
     margin-bottom: 2rem; /* Add margin at the bottom */
 }
 
-/* Make full-width containers taller */
+.chart-container h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #444;
+    text-align: center;
+}
+
 .chart-container.full-width {
     grid-column: 1 / -1;
     height: 350px; /* Slightly taller for full-width charts */
-}
-
-/* Fix the tab content overflow */
-.tab-content {
-    display: none;
-    padding: 2rem;
-    overflow: auto; /* Add overflow handling */
-}
-
-/* Ensure charts grid has proper spacing */
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem; /* Add bottom margin */
-}
-
-/* Add responsive adjustments */
-@media (max-width: 1200px) {
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .chart-container {
-        height: 350px; /* Taller on smaller screens */
-    }
-}
-
-@media (max-width: 768px) {
-    .chart-container {
-        height: 300px;
-    }
 }
 
 /* Footer */
@@ -550,6 +524,10 @@ footer {
 @media (max-width: 1200px) {
     .charts-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .chart-container {
+        height: 350px; /* Taller on smaller screens */
     }
 }
 
@@ -569,6 +547,10 @@ footer {
     
     .tab-content {
         padding: 1.5rem;
+    }
+    
+    .chart-container {
+        height: 300px;
     }
 }
 
