@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Analysis Tool</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-line"></i>
+            <span>Supply Chain Analytics</span>
+        </div>
+        <button id="home-btn" class="home-button">
+            <i class="fas fa-home" href="/#"></i> Home
+        </button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Lead Time Variability & Bullwhip Effect Analysis</h1>
+                <p>Upload your procurement data to gain valuable insights</p>
+                <div class="credits">
+                    <p>Developed by: <span>Nabiev Azamat</span></p>
+                    <p>Student ID: <span>2217423</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="upload-section">
+            <div class="card">
+                <h2><i class="fas fa-file-upload"></i> Upload Data</h2>
+                <p>Please upload a CSV file with the required structure:</p>
+                <div class="file-structure">
+                    <p>Order_ID, Supplier, Order_Date, Expected_Delivery_Date, Actual_Delivery_Date, 
+                    Product_Category, Transportation_Mode, Supplier_Location, Disruption_Type, 
+                    Customer_Demand, Order_Quantity</p>
+                </div>
+                <div class="file-upload">
+                    <input type="file" id="csv-upload" accept=".csv" hidden>
+                    <label for="csv-upload" class="upload-button">
+                        <i class="fas fa-cloud-upload-alt"></i> Select CSV File
+                    </label>
+                    <span id="file-name">No file selected</span>
+                </div>
+                <button id="analyze-btn" class="analyze-button" disabled>
+                    <i class="fas fa-analytics"></i> Analyze Data
+                </button>
+            </div>
+        </section>
+
+        <section id="results" class="results-section hidden">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="key-metrics">Key Metrics</button>
+                <button class="tab-button" data-tab="visual-analysis">Visual Analysis</button>
+                <button class="tab-button" data-tab="forecasting">Forecasting</button>
+            </div>
+
+            <div id="key-metrics" class="tab-content active">
+                <h2>Key Analysis Results</h2>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>Highest Average Lead Time</h3>
+                        <div class="metric-icon"><i class="fas fa-truck-loading"></i></div>
+                        <div id="highest-lead-supplier" class="metric-value">--</div>
+                        <div class="metric-label">Supplier</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Lowest Average Lead Time</h3>
+                        <div class="metric-icon"><i class="fas fa-shipping-fast"></i></div>
+                        <div id="lowest-lead-transport" class="metric-value">--</div>
+                        <div class="metric-label">Transportation Mode</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Highest Average Delays</h3>
+                        <div class="metric-icon"><i class="fas fa-calendar-times"></i></div>
+                        <div id="highest-delay-month" class="metric-value">--</div>
+                        <div class="metric-label">Month</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Longest Average Delay</h3>
+                        <div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div id="longest-delay-disruption" class="metric-value">--</div>
+                        <div class="metric-label">Disruption Type</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Shortest Lead Time</h3>
+                        <div class="metric-icon"><i class="fas fa-box"></i></div>
+                        <div id="shortest-lead-category" class="metric-value">--</div>
+                        <div class="metric-label">Product Category</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="visual-analysis" class="tab-content">
+                <h2>Visual Analysis</h2>
+                
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Transportation Mode Impact on Delays</h3>
+                        <canvas id="transport-delay-chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Seasonal Patterns in Lead Times</h3>
+                        <canvas id="seasonal-leadtime-chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Bullwhip Effect Analysis</h3>
+                        <canvas id="bullwhip-chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Lead Time vs Order Quantity Variability</h3>
+                        <canvas id="variability-correlation-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="forecasting" class="tab-content">
+                <h2>Forecasting Analysis</h2>
+                
+                <div class="charts-grid">
+                    <div class="chart-container full-width">
+                        <h3>Lead Time Variability Forecast</h3>
+                        <canvas id="leadtime-forecast-chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container full-width">
+                        <h3>Bullwhip Effect Forecast</h3>
+                        <canvas id="bullwhip-forecast-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Supply Chain Analytics Tool by Nabiev Azamat (2217423)</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
