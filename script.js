@@ -15,6 +15,13 @@ let charts = {};
 // ====== Event Listeners ======
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
+    
+    // Force charts to resize when tabs are changed
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            setTimeout(resizeCharts, 50);
+        });
+    });
 });
 
 // File upload handler
@@ -27,16 +34,6 @@ fileInput.addEventListener('change', (e) => {
         fileNameDisplay.textContent = 'No file selected';
         analyzeBtn.disabled = true;
     }
-});
-
-// Add this to your event listeners section
-window.addEventListener('load', function() {
-    // Force charts to resize when tabs are changed
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            setTimeout(resizeCharts, 50);
-        });
-    });
 });
 
 // Analyze button handler
@@ -72,12 +69,8 @@ tabButtons.forEach(button => {
 
 // Home button
 homeBtn.addEventListener('click', () => {
-    // Reset to initial state
-    fileInput.value = '';
-    fileNameDisplay.textContent = 'No file selected';
-    analyzeBtn.disabled = true;
-    resultsSection.classList.add('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Redirect to the home page URL
+    window.location.href = "https://ali747711.github.io/Home/";
 });
 
 // Window resize handler for charts
@@ -269,53 +262,56 @@ function createCharts() {
             'Average Delay (days)'
         );
         
-    
-    // 2. Seasonal Patterns in Lead Times
-    const seasonalCtx = document.getElementById('seasonal-leadtime-chart').getContext('2d');
-    charts.seasonalPattern = createLineChart(
-        seasonalCtx, 
-        processedData.seasonalPatternData,
-        'Month',
-        'Average Lead Time (days)'
-    );
-    
-    // 3. Bullwhip Effect Analysis
-    const bullwhipCtx = document.getElementById('bullwhip-chart').getContext('2d');
-    charts.bullwhip = createMultiLineChart(
-        bullwhipCtx, 
-        processedData.bullwhipData,
-        'Month',
-        'Quantity'
-    );
-    
-    // 4. Lead Time vs Order Quantity Variability
-    const variabilityCtx = document.getElementById('variability-correlation-chart').getContext('2d');
-    charts.variability = createScatterChart(
-        variabilityCtx, 
-        processedData.variabilityData,
-        'Order Quantity Variability (%)',
-        'Lead Time Variability (%)'
-    );
-    
-    // === Forecasting Charts ===
-    
-    // 1. Lead Time Variability Forecast
-    const leadtimeForecastCtx = document.getElementById('leadtime-forecast-chart').getContext('2d');
-    charts.leadtimeForecast = createForecastChart(
-        leadtimeForecastCtx, 
-        processedData.leadTimeForecastData,
-        'Month',
-        'Lead Time (days)'
-    );
-    
-    // 2. Bullwhip Effect Forecast
-    const bullwhipForecastCtx = document.getElementById('bullwhip-forecast-chart').getContext('2d');
-    charts.bullwhipForecast = createForecastChart(
-        bullwhipForecastCtx, 
-        processedData.bullwhipForecastData,
-        'Month',
-        'Quantity Ratio'
-    );
+        // 2. Seasonal Patterns in Lead Times
+        const seasonalCtx = document.getElementById('seasonal-leadtime-chart').getContext('2d');
+        charts.seasonalPattern = createLineChart(
+            seasonalCtx, 
+            processedData.seasonalPatternData,
+            'Month',
+            'Average Lead Time (days)'
+        );
+        
+        // 3. Bullwhip Effect Analysis
+        const bullwhipCtx = document.getElementById('bullwhip-chart').getContext('2d');
+        charts.bullwhip = createMultiLineChart(
+            bullwhipCtx, 
+            processedData.bullwhipData,
+            'Month',
+            'Quantity'
+        );
+        
+        // 4. Lead Time vs Order Quantity Variability
+        const variabilityCtx = document.getElementById('variability-correlation-chart').getContext('2d');
+        charts.variability = createScatterChart(
+            variabilityCtx, 
+            processedData.variabilityData,
+            'Order Quantity Variability (%)',
+            'Lead Time Variability (%)'
+        );
+        
+        // === Forecasting Charts ===
+        
+        // 1. Lead Time Variability Forecast
+        const leadtimeForecastCtx = document.getElementById('leadtime-forecast-chart').getContext('2d');
+        charts.leadtimeForecast = createForecastChart(
+            leadtimeForecastCtx, 
+            processedData.leadTimeForecastData,
+            'Month',
+            'Lead Time (days)'
+        );
+        
+        // 2. Bullwhip Effect Forecast
+        const bullwhipForecastCtx = document.getElementById('bullwhip-forecast-chart').getContext('2d');
+        charts.bullwhipForecast = createForecastChart(
+            bullwhipForecastCtx, 
+            processedData.bullwhipForecastData,
+            'Month',
+            'Quantity Ratio'
+        );
+        
+        // Resize all charts to fit containers
+        resizeCharts();
+    }, 100);
 }
 
 // ====== Data Processing Helpers ======
@@ -1012,7 +1008,7 @@ function createForecastChart(ctx, data, xLabel, yLabel) {
 
 // ====== Utility Functions ======
 
-// Update the resize function
+// Resize all charts 
 function resizeCharts() {
     Object.values(charts).forEach(chart => {
         if (chart) {
