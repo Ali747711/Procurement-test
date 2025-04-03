@@ -29,6 +29,16 @@ fileInput.addEventListener('change', (e) => {
     }
 });
 
+// Add this to your event listeners section
+window.addEventListener('load', function() {
+    // Force charts to resize when tabs are changed
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            setTimeout(resizeCharts, 50);
+        });
+    });
+});
+
 // Analyze button handler
 analyzeBtn.addEventListener('click', () => {
     const file = fileInput.files[0];
@@ -246,16 +256,19 @@ function createCharts() {
     
     charts = {};
     
-    // === Visual Analysis Charts ===
-    
-    // 1. Transportation Mode Impact on Delays
-    const transportCtx = document.getElementById('transport-delay-chart').getContext('2d');
-    charts.transportDelay = createBarChart(
-        transportCtx, 
-        processedData.transportDelayData,
-        'Transportation Modes',
-        'Average Delay (days)'
-    );
+    // Add a small delay to ensure the containers are fully rendered
+    setTimeout(() => {
+        // === Visual Analysis Charts ===
+        
+        // 1. Transportation Mode Impact on Delays
+        const transportCtx = document.getElementById('transport-delay-chart').getContext('2d');
+        charts.transportDelay = createBarChart(
+            transportCtx, 
+            processedData.transportDelayData,
+            'Transportation Modes',
+            'Average Delay (days)'
+        );
+        
     
     // 2. Seasonal Patterns in Lead Times
     const seasonalCtx = document.getElementById('seasonal-leadtime-chart').getContext('2d');
@@ -999,10 +1012,16 @@ function createForecastChart(ctx, data, xLabel, yLabel) {
 
 // ====== Utility Functions ======
 
-// Resize all charts 
+// Update the resize function
 function resizeCharts() {
     Object.values(charts).forEach(chart => {
-        if (chart) chart.resize();
+        if (chart) {
+            try {
+                chart.resize();
+            } catch (e) {
+                console.log("Error resizing chart:", e);
+            }
+        }
     });
 }
 
